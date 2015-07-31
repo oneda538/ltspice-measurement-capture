@@ -1,5 +1,5 @@
 import time
-#from xlsxwriter.workbook import Workbook
+from xlsxwriter.workbook import Workbook
 
 def code(inFileName):
 
@@ -8,7 +8,7 @@ def code(inFileName):
   lines = infile.readlines()
   infile.close()
 
-  outFileName = "{0}_{1}.csv".format(lines[0].split('\\')[-1].split('.')[0], time.strftime('%Y-%m-%d_%H-%M-%S'))
+  outFileName = "{0}_{1}".format(lines[0].split('\\')[-1].split('.')[0], time.strftime('%Y-%m-%d_%H-%M-%S'))
   print outFileName
 
   dataList = []
@@ -48,7 +48,7 @@ def code(inFileName):
   
   
 def dataToCSV(dataList, outFileName):
-  outfile = open(outFileName, 'w')
+  outfile = open(outFileName+".csv", 'w')
   for a in dataList:
       writeString = ""
       for b in a:
@@ -57,9 +57,46 @@ def dataToCSV(dataList, outFileName):
 
   outfile.close()
 
+def dataToXLSX(dataList, outFileName):
 
+  workbook = Workbook(outFileName+".xlsx")
+  worksheetData = workbook.add_worksheet('Data')
+  
+  bold = workbook.add_format({'bold': 1})
 
+  # Format the worksheet1 data cells that the chart will refer to
+  headings = ['Time', 'Set Temp(C)', 'Actual Temp(C)', 'Set Vin(V)', 'Actual Vin(V)', 'Iin(A)', 'Vout(V)', 'Set Iout(A)', 
+              'Actual Iout(A)', 'Vout AC(Vpp)', 'Vout AC(Vrms)', 'Efficiency', 'SpurFreq<200kHz(Hz)', 
+              'SpurLevel<200kHz(dB)', 'SpurFreq340kHz(Hz)', 'SpurLevel340kHz(dB)', 'L1 Temperature(degC)']
+  
+  # Set number format "constructor"
+  formatcells1 = workbook.add_format()
+  formatcells2 = workbook.add_format()
+  
+  # Format to 3 decimal places
+  formatcells1.set_num_format('0.000')
+  
+  # Columns A to F width set to 25. Note that it is not possible to "auto-fit" as this only happens at run-time in Excel
+  worksheetData.set_column('A:A', 25)
+  worksheetData.set_column('B:Q', 18)
+  
+  # Set horizontal and vertical alignment
+  formatcells1.set_align('center') 
+  formatcells1.set_align('vcenter')
+  formatcells2.set_align('center') 
+  formatcells2.set_align('vcenter')
+  
+  # Write headings row to workbook
+  worksheetData.write_row('A1', headings, bold) # note that alignment not applicable to the write_row method
+  
+  
+  ####repeat lots
+  worksheetData.write('D%i' % (row_count), float(configuredInputVolts), formatcells1)
+  self.worksheetData.write('A%i' % (self.row_count), time.ctime(), self.formatcells2)
+  
+  workbook.close()
 
+  
 if __name__ == "__main__":
   inFileName = r"C:\Users\oneillda\AppData\Local\Temp\IEC61000-4-5_testbench.log"
   try:
@@ -67,4 +104,5 @@ if __name__ == "__main__":
   except:
     print "Fail"
   finally:
+    print "Done"
     time.sleep(2)
