@@ -1,4 +1,5 @@
 import time
+#from xlsxwriter.workbook import Workbook
 
 def code(inFileName):
 
@@ -43,7 +44,10 @@ def code(inFileName):
           dataList[i+1].append(lines[startLine + 2 + i].split()[1])
           
   print dataList[:20]
-
+  dataToCSV(dataList, outFileName)
+  
+  
+def dataToCSV(dataList, outFileName):
   outfile = open(outFileName, 'w')
   for a in dataList:
       writeString = ""
