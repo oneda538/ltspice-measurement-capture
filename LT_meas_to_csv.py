@@ -1,66 +1,66 @@
 import time, sys, traceback
 from xlsxwriter.workbook import Workbook
 
-def code(inFileName):
+def code(inFileName, outFileName):
 
   infile = open(inFileName, 'r')
-
   lines = infile.readlines()
   infile.close()
 
-  outFileName = "{0}_{1}".format(lines[0].split('\\')[-1].split('.')[0], time.strftime('%Y-%m-%d_%H-%M-%S'))
-  print outFileName
-
   dataList = []
-
   headerDone = False
 
   for line in lines:
-      if ".step" in line:
-          if not headerDone:
-              hdrIn = line.split()[1:]
-              hdrOut = []
-              for d in hdrIn:
-                  hdrOut.append(d.split("=")[0])
-              dataList.append(hdrOut)
-              headerDone = True
-          
-          datIn = line.split()[1:]
-          datOut = []
-          for d in datIn:
-              datOut.append(d.split("=")[1])
-          dataList.append(datOut)
+    if ".step" in line:
+      if not headerDone:
+        hdrIn = line.split()[1:]
+        hdrOut = []
+        for d in hdrIn:
+          hdrOut.append(d.split("=")[0])
+        dataList.append(hdrOut)
+        headerDone = True
+      
+      datIn = line.split()[1:]
+      datOut = []
+      for d in datIn:
+        datOut.append(d.split("=")[1])
+      dataList.append(datOut)
 
   #find measurement data
   measurementStartLines = []
   for i in range(len(lines)):
-      if "Measurement" in lines[i] and "FAIL'ed" not in lines[i]:
-          measurementStartLines.append(i)
-
+    if "Measurement" in lines[i]:
+      if "FAIL'ed" not in lines[i]:
+        measurementStartLines.append(i)
+      else:
+        print "WARNING: Failed measurement"
   #add headers header column
   for startLine in measurementStartLines:
-      dataList[0].append(lines[startLine].split(" ")[1].strip())
-      for i in range(len(dataList)-1):
-          dataList[i+1].append(lines[startLine + 2 + i].split()[1])
-          
+    dataList[0].append(lines[startLine].split(" ")[1].strip())
+    for i in range(len(dataList)-1):
+      dataList[i+1].append(lines[startLine + 2 + i].split()[1])
+
   print dataList[:20]
-  dataToCSV(dataList, outFileName)
-  dataToXLSX(dataList, outFileName)
+  if outFileName[-4:] == "xlsx":
+    dataToXLSX(dataList, outFileName)
+  else:
+    dataToCSV(dataList, outFileName)
+    
+  
   
   
 def dataToCSV(dataList, outFileName):
-  outfile = open(outFileName+".csv", 'w')
+  outfile = open(outFileName, 'w')
   for a in dataList:
-      writeString = ""
-      for b in a:
-          outfile.write(b + ',')
-      outfile.write('\n')
-
+    writeString = ""
+    for b in a:
+      outfile.write(b + ',')
+    outfile.write('\n')
   outfile.close()
 
 def dataToXLSX(dataList, outFileName):
 
-  workbook = Workbook(outFileName+".xlsx")
+  workbook = Workbook(outFileName)
   worksheetData = workbook.add_worksheet('Data')
   
   columnMap = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8:"I", 9:"J", 10:"K"}
@@ -108,9 +108,14 @@ def dataToXLSX(dataList, outFileName):
 
   
 if __name__ == "__main__":
+  outfileType = "xlsx"
+
   inFileName = r"C:\Users\oneillda\AppData\Local\Temp\IEC61000-4-5_testbench.log"
+  #name = inFileName.split("\\")[-1]
+  outFileName = "{0}_{1}.{2}".format(inFileName.split('\\')[-1].split('.')[0], time.strftime('%Y-%m-%d_%H-%M-%S'), outfileType)
+  
   try:
-    code(inFileName)
+    code(inFileName, outFileName)
   except:
     print "Fail"
     ex_type, ex, tb = sys.exc_info()
