@@ -95,7 +95,6 @@ def dataToXLSX(dataList, outFileName):
   for data in dataList[1:]:
     columnCount = 0
     for item in data:
-      print columnMap[columnCount], rowCount
       worksheetData.write('%s%i' % (columnMap[columnCount], rowCount), float(item))
       columnCount += 1
     rowCount += 1
@@ -103,6 +102,7 @@ def dataToXLSX(dataList, outFileName):
     #worksheetData.write('D%i' % (rowCount + 1), float(configuredInputVolts), formatcells1)
     #self.worksheetData.write('A%i' % (rowCount), time.ctime(), self.formatcells2)
   
+  worksheetData.autofilter('A1:%s%d' % (columnMap[len(dataList[0])-1], len(dataList)))
   workbook.close()
 
   
