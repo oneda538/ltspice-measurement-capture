@@ -103,6 +103,7 @@ def dataToXLSX(dataList, outFileName):
     #self.worksheetData.write('A%i' % (rowCount), time.ctime(), self.formatcells2)
   
   worksheetData.autofilter('A1:%s%d' % (columnMap[len(dataList[0])-1], len(dataList)))
+  worksheetData.freeze_panes(1, 0)
   workbook.close()
 
   
