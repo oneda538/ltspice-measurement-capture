@@ -33,7 +33,7 @@ def processFile(inFileName):
       if "FAIL'ed" not in lines[i]:
         measurementStartLines.append(i)
       else:
-        print "WARNING: Failed measurement"
+        print "WARNING: Failed measurement: %s" % lines[i].split(" ")[1].strip()
   #add headers header column
   for startLine in measurementStartLines:
     dataList[0].append(lines[startLine].split(" ")[1].strip())
@@ -104,7 +104,8 @@ def dataToXLSX(dataList, outFileName):
   
 if __name__ == "__main__":
   outfileType = "xlsx"
-  inFileName = r"C:\Users\oneillda\AppData\Local\Temp\IEC61000-4-5_testbench.log"
+  #inFileName = r"C:\Users\oneillda\AppData\Local\Temp\IEC61000-4-5_testbench.log"
+  inFileName = r"C:\Users\oneillda\AppData\Local\Temp\Soft_start_testbench.log"
   outFileName = "{0}_{1}.{2}".format(inFileName.split('\\')[-1].split('.')[0], time.strftime('%Y-%m-%d_%H-%M-%S'), outfileType)
   
   try:
