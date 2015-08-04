@@ -1,7 +1,7 @@
 import time, sys, traceback
 from xlsxwriter.workbook import Workbook
 
-def code(inFileName, outFileName):
+def processFile(inFileName):
 
   infile = open(inFileName, 'r')
   lines = infile.readlines()
@@ -40,12 +40,7 @@ def code(inFileName, outFileName):
     for i in range(len(dataList)-1):
       dataList[i+1].append(lines[startLine + 2 + i].split()[1])
 
-  print dataList[:20]
-  if outFileName[-4:] == "xlsx":
-    dataToXLSX(dataList, outFileName)
-  else:
-    dataToCSV(dataList, outFileName)
-    
+  return dataList
   
   
   
@@ -109,13 +104,20 @@ def dataToXLSX(dataList, outFileName):
   
 if __name__ == "__main__":
   outfileType = "xlsx"
-
   inFileName = r"C:\Users\oneillda\AppData\Local\Temp\IEC61000-4-5_testbench.log"
-  #name = inFileName.split("\\")[-1]
   outFileName = "{0}_{1}.{2}".format(inFileName.split('\\')[-1].split('.')[0], time.strftime('%Y-%m-%d_%H-%M-%S'), outfileType)
   
   try:
-    code(inFileName, outFileName)
+    #use input file to create dataList
+    dataList = processFile(inFileName)
+    
+    #write data to output file
+    if outFileName[-4:] == "xlsx":
+      dataToXLSX(dataList, outFileName)
+    else:
+      dataToCSV(dataList, outFileName)
+  
+  #catch exceptions
   except:
     print "Fail"
     ex_type, ex, tb = sys.exc_info()
