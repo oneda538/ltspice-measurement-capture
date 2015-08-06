@@ -1,5 +1,6 @@
 import time, sys, traceback
 from xlsxwriter.workbook import Workbook
+from optparse import OptionParser
 
 def processFile(inFileName):
 
@@ -103,10 +104,28 @@ def dataToXLSX(dataList, outFileName):
 
   
 if __name__ == "__main__":
-  outfileType = "xlsx"
-  #inFileName = r"C:\Users\oneillda\AppData\Local\Temp\IEC61000-4-5_testbench.log"
-  inFileName = r"C:\Users\oneillda\AppData\Local\Temp\Soft_start_testbench.log"
-  outFileName = "{0}_{1}.{2}".format(inFileName.split('\\')[-1].split('.')[0], time.strftime('%Y-%m-%d_%H-%M-%S'), outfileType)
+  usage = "usage: %prog [options] arg1 arg2"
+  parser = OptionParser(usage=usage)
+  parser.add_option("-t", "--type", dest="outFileType", default="xlsx",
+                      help="type of output (xlsx, csv etc)")
+
+  (options, args) = parser.parse_args()
+  if len(args) == 0:
+    print "No argument supplied assuming infile name"
+    #inFileName = r"C:\Users\oneillda\AppData\Local\Temp\IEC61000-4-5_testbench.log"
+    inFileName = r"C:\Users\oneillda\AppData\Local\Temp\Soft_start_testbench.log"
+    
+    #go to temp log location
+    #find list of .log files in order of just modified
+    #find latest log with "Circuit" and ".asc" in first line
+    
+  else:
+    print args
+    inFileName = r"C:\Users\oneillda\AppData\Local\Temp\Soft_start_testbench.log"
+
+
+  outFileType = options.outFileType
+  outFileName = "{0}_{1}.{2}".format(inFileName.split('\\')[-1].split('.')[0], time.strftime('%Y-%m-%d_%H-%M-%S'), outFileType)
   
   try:
     #use input file to create dataList
