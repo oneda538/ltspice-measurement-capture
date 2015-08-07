@@ -1,4 +1,4 @@
-import time, sys, traceback
+import time, sys, traceback, os, tempfile
 from xlsxwriter.workbook import Workbook
 from optparse import OptionParser
 
@@ -114,8 +114,22 @@ if __name__ == "__main__":
     print "No argument supplied assuming infile name"
     #inFileName = r"C:\Users\oneillda\AppData\Local\Temp\IEC61000-4-5_testbench.log"
     inFileName = r"C:\Users\oneillda\AppData\Local\Temp\Soft_start_testbench.log"
+    TEMP_DIR = tempfile.gettempdir()
     
     #go to temp log location
+    print TEMP_DIR
+    fileList = os.listdir(TEMP_DIR)
+    timeAndFileList = []
+    for i in range(len(fileList)):
+      if ".log" in fileList[i]:
+        timeAndFileList.append((os.path.getmtime(TEMP_DIR + '\\' + fileList[i]), TEMP_DIR + '\\' + fileList[i]))
+    
+    timeAndFileList.sort(key=lambda item: item[0])
+    
+    for a in timeAndFileList:
+      print a
+    
+    
     #find list of .log files in order of just modified
     #find latest log with "Circuit" and ".asc" in first line
     
