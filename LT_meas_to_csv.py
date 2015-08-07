@@ -111,27 +111,34 @@ if __name__ == "__main__":
 
   (options, args) = parser.parse_args()
   if len(args) == 0:
-    print "No argument supplied assuming infile name"
+    print "No argument supplied assuming latest log file in temp directory"
     #inFileName = r"C:\Users\oneillda\AppData\Local\Temp\IEC61000-4-5_testbench.log"
-    inFileName = r"C:\Users\oneillda\AppData\Local\Temp\Soft_start_testbench.log"
+    #inFileName = r"C:\Users\oneillda\AppData\Local\Temp\Soft_start_testbench.log"
+    inFileName = ""
     TEMP_DIR = tempfile.gettempdir()
     
     #go to temp log location
-    print TEMP_DIR
+    print "Temp Dir:", TEMP_DIR
     fileList = os.listdir(TEMP_DIR)
     timeAndFileList = []
     for i in range(len(fileList)):
       if ".log" in fileList[i]:
         timeAndFileList.append((os.path.getmtime(TEMP_DIR + '\\' + fileList[i]), TEMP_DIR + '\\' + fileList[i]))
     
-    timeAndFileList.sort(key=lambda item: item[0])
+    timeAndFileList.sort(key=lambda item: item[0], reverse=True)
     
-    for a in timeAndFileList:
-      print a
+    for modifiedTime, fileName in timeAndFileList:
+      #print fileName
+      fh = file(fileName)
+      firstLine = fh.readline()
+      if ".asc" in firstLine and "Circuit" in firstLine:
+        inFileName = fileName
+        break
+    if inFileName == "":
+      print "no log file"
+      SystemExit
+    print "File to precess:" + inFileName
     
-    
-    #find list of .log files in order of just modified
-    #find latest log with "Circuit" and ".asc" in first line
     
   else:
     print args
