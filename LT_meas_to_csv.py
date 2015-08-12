@@ -102,6 +102,25 @@ def dataToXLSX(dataList, outFileName):
   worksheetData.freeze_panes(1, 0)
   workbook.close()
 
+def getLogFromDirectory(directoryName):
+  inFileName = ""
+  fileList = os.listdir(directoryName)
+  timeAndFileList = []
+  for i in range(len(fileList)):
+    if ".log" in fileList[i]:
+      timeAndFileList.append((os.path.getmtime(directoryName + '\\' + fileList[i]), directoryName + '\\' + fileList[i]))
+  
+  timeAndFileList.sort(key=lambda item: item[0], reverse=True)
+  
+  for modifiedTime, fileName in timeAndFileList:
+    #print fileName
+    fh = file(fileName)
+    firstLine = fh.readline()
+    if ".asc" in firstLine and "Circuit" in firstLine:
+      inFileName = fileName
+      break
+  return inFileName
+  
   
 if __name__ == "__main__":
   usage = "usage: %prog [options] arg1 arg2"
@@ -112,32 +131,16 @@ if __name__ == "__main__":
   (options, args) = parser.parse_args()
   if len(args) == 0:
     print "No argument supplied assuming latest log file in temp directory"
-    #inFileName = r"C:\Users\oneillda\AppData\Local\Temp\IEC61000-4-5_testbench.log"
-    #inFileName = r"C:\Users\oneillda\AppData\Local\Temp\Soft_start_testbench.log"
-    inFileName = ""
     TEMP_DIR = tempfile.gettempdir()
-    
-    #go to temp log location
+
+    #get log from temp
     print "Temp Dir:", TEMP_DIR
-    fileList = os.listdir(TEMP_DIR)
-    timeAndFileList = []
-    for i in range(len(fileList)):
-      if ".log" in fileList[i]:
-        timeAndFileList.append((os.path.getmtime(TEMP_DIR + '\\' + fileList[i]), TEMP_DIR + '\\' + fileList[i]))
+    inFileName = getLogFromDirectory(TEMP_DIR)
     
-    timeAndFileList.sort(key=lambda item: item[0], reverse=True)
-    
-    for modifiedTime, fileName in timeAndFileList:
-      #print fileName
-      fh = file(fileName)
-      firstLine = fh.readline()
-      if ".asc" in firstLine and "Circuit" in firstLine:
-        inFileName = fileName
-        break
     if inFileName == "":
       print "no log file"
       SystemExit
-    print "File to precess:" + inFileName
+    print "File to process:" + inFileName
     
     
   else:
