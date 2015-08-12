@@ -141,6 +141,8 @@ if __name__ == "__main__":
                       help="type of output (xlsx, csv etc)")
 
   (options, args) = parser.parse_args()
+
+  #if no args get latest log from temp directory
   if len(args) == 0:
     print "No argument supplied assuming latest log file in temp directory"
     TEMP_DIR = tempfile.gettempdir()
@@ -151,8 +153,18 @@ if __name__ == "__main__":
     
     if inFileName == "":
       print "no log file"
-      SystemExit
+      raise SystemError
     print "File to process:" + inFileName
+
+  elif len(args) == 1:
+    if os.path.isfile(args[0]):
+      inFileName = args[0]
+    elif os.path.isdir(args[0]):
+      inFileName = getLogFromDirectory(args[0])
+    else:
+      print "unknown parameter"
+      raise SystemError
+    print "we have file {0}".format(inFileName)
     
     
   else:
