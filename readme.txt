@@ -12,5 +12,5 @@ The output can either be in a csv format (You can chose a different extension)
 or in a xlsx format (default). The xlsx option has a freeze panes and auto 
 filter applied. This is decided via a command line parameter.
 
-The default run time option is below:
+The default run time option (for me in Win 7) is below:
 LT_meas_to_csv.exe -t xlsx C:\Users\{username}\AppData\Local\Temp
