@@ -137,7 +137,7 @@ def getLogFromDirectory(directoryName):
   
   
 if __name__ == "__main__":
-  usage = "usage: %prog [options] arg1 arg2"
+  usage = "usage: %prog [options] simulation.log"
   parser = OptionParser(usage=usage)
   parser.add_option("-t", "--type", dest="outFileType", default="xlsx",
                       help="type of output (xlsx, csv etc)")
@@ -196,4 +196,4 @@ if __name__ == "__main__":
     print ex_type, ex
   finally:
     print "Done"
-    time.sleep(2)
+    time.sleep(5)

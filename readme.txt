@@ -14,3 +14,15 @@ filter applied. This is decided via a command line parameter.
 
 The default run time option (for me in Win 7) is below:
 LT_meas_to_csv.exe -t xlsx C:\Users\{username}\AppData\Local\Temp
+
+
+
+How to use:
+
+1 - Drag and drop a .log from a simulation onto the exe
+2 - If your .log files are stored in your temp directory the just run the exe
+3 - Run the exe in the same folder as you log file
+
+In all cases the output will be created in the same directory as you simulation.
+
+NOTE: You must have .step and .meas commands for this to be any use to you.
