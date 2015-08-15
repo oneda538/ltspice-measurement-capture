@@ -30,6 +30,8 @@ def processFile(inFileName):
   lines = infile.readlines()
   infile.close()
 
+  outputFolder = os.path.dirname(lines[0].split()[-1])
+  
   dataList = []
   headerDone = False
 
@@ -65,7 +67,7 @@ def processFile(inFileName):
     for i in range(len(dataList)-1):
       dataList[i+1].append(lines[startLine + 2 + i].split()[1])
 
-  return dataList
+  return (dataList, outputFolder)
   
   
 #dump data to csv file  
@@ -177,13 +179,14 @@ if __name__ == "__main__":
   
   try:
     #use input file to create dataList
-    dataList = processFile(inFileName)
+    (dataList, outputFolder) = processFile(inFileName)
+    outFileLocation = outputFolder + "\\" + outFileName
     
     #write data to output file
     if outFileName[-4:] == "xlsx":
-      dataToXLSX(dataList, outFileName)
+      dataToXLSX(dataList, outFileLocation)
     else:
-      dataToCSV(dataList, outFileName)
+      dataToCSV(dataList, outFileLocation)
   
   #catch exceptions
   except:
