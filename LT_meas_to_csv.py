@@ -105,6 +105,8 @@ def dataToXLSX(dataList, outFileName):
   for data in dataList[1:]:
     columnCount = 0
     for item in data:
+      if item[-1] == "C":
+        item = item[:-2]
       worksheetData.write('%s%i' % (columnMap[columnCount], rowCount), float(item))
       columnCount += 1
     rowCount += 1
