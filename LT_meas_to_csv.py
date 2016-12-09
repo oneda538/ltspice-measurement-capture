@@ -64,7 +64,7 @@ def processFile(inFileName):
             if "FAIL'ed" not in lines[i]:
                 measurementStartLines.append(i)
             else:
-                print "WARNING: Failed measurement: %s" % lines[i].split(" ")[1].strip()
+                print("WARNING: Failed measurement: %s" % lines[i].split(" ")[1].strip())
 
     # add headers header column
     for startLine in measurementStartLines:
@@ -153,17 +153,17 @@ if __name__ == "__main__":
 
     # if no args get latest log from temp directory
     if len(args) == 0:
-        print "No argument supplied assuming latest log file in temp directory"
+        print("No argument supplied assuming latest log file in temp directory")
         TEMP_DIR = tempfile.gettempdir()
 
         # get log from temp
-        print "Temp Dir:", TEMP_DIR
+        print("Temp Dir:", TEMP_DIR)
         inFileName = getLogFromDirectory(TEMP_DIR)
 
         if inFileName == "":
-            print "no log file"
+            print("no log file")
             raise SystemError
-        print "File to process:" + inFileName
+        print("File to process:" + inFileName)
 
     elif len(args) == 1:
         if os.path.isfile(args[0]):
@@ -171,12 +171,12 @@ if __name__ == "__main__":
         elif os.path.isdir(args[0]):
             inFileName = getLogFromDirectory(args[0])
         else:
-            print "unknown parameter"
+            print("unknown parameter")
             raise SystemError
-        print "we have file {0}".format(inFileName)
+        print("we have file {0}".format(inFileName))
 
     else:
-        print args
+        print(args)
         inFileName = r"C:\Users\oneillda\AppData\Local\Temp\Soft_start_testbench.log"
 
     outFileType = options.outFileType
@@ -196,10 +196,10 @@ if __name__ == "__main__":
 
     # catch exceptions
     except:
-        print "Fail"
+        print("Fail")
         ex_type, ex, tb = sys.exc_info()
         traceback.print_tb(tb)
-        print ex_type, ex
+        print(ex_type, ex)
     finally:
-        print "Done"
+        print("Done")
         time.sleep(5)
