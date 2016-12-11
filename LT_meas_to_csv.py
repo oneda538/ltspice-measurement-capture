@@ -31,31 +31,32 @@ from optparse import OptionParser
 
 # Process a logfile for step and measurement data
 def processFile(inFileName):
-    infile = open(inFileName, 'r')
-    lines = infile.readlines()
-    infile.close()
+    #infile = open(inFileName, 'r')
+    with open(inFileName, encoding='utf-16-le') as infile:
+        lines = infile.readlines()
+        infile.close()
 
-    outputFolder = os.path.dirname(lines[0].split()[-1])
+        outputFolder = os.path.dirname(lines[0].split()[-1])
 
-    dataList = []
-    headerDone = False
+        dataList = []
+        headerDone = False
 
-    for line in lines:
-        # process header line
-        if ".step" in line:
-            if not headerDone:
-                hdrIn = line.split()[1:]
-                hdrOut = []
-                for d in hdrIn:
-                    hdrOut.append(d.split("=")[0])
-                dataList.append(hdrOut)
-                headerDone = True
+        for line in lines:
+            # process header line
+            if ".step" in line:
+                if not headerDone:
+                    hdrIn = line.split()[1:]
+                    hdrOut = []
+                    for d in hdrIn:
+                        hdrOut.append(d.split("=")[0])
+                    dataList.append(hdrOut)
+                    headerDone = True
 
-            datIn = line.split()[1:]
-            datOut = []
-            for d in datIn:
-                datOut.append(d.split("=")[1])
-            dataList.append(datOut)
+                datIn = line.split()[1:]
+                datOut = []
+                for d in datIn:
+                    datOut.append(d.split("=")[1])
+                dataList.append(datOut)
 
     # find measurement data
     measurementStartLines = []
