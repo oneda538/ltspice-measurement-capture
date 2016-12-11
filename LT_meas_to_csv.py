@@ -134,12 +134,11 @@ def getLogFromDirectory(directoryName):
     timeAndFileList.sort(key=lambda item: item[0], reverse=True)
 
     for modifiedTime, fileName in timeAndFileList:
-        # print fileName
-        fh = file(fileName)
-        firstLine = fh.readline()
-        if ".asc" in firstLine and "Circuit" in firstLine:
-            inFileName = fileName
-            break
+        with open(fileName, encoding='utf-16-le') as fh:
+            firstLine = fh.readline()
+            if ".asc" in firstLine and "Circuit" in firstLine:
+                inFileName = fileName
+                break
     return inFileName
 
 
