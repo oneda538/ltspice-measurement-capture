@@ -142,8 +142,8 @@ def getLogFromDirectory(directoryName):
                 break
     return inFileName
 
-
-if __name__ == "__main__":
+print(__name__)
+if "__main__" in __name__:
     usage = "usage: %prog [options] simulation.log"
     parser = OptionParser(usage=usage)
     parser.add_option("-t", "--type", dest="outFileType", default="xlsx",
@@ -151,6 +151,7 @@ if __name__ == "__main__":
 
     (options, args) = parser.parse_args()
 
+    print("Python", sys.version)
     # if no args get latest log from temp directory
     if len(args) == 0:
         print("No argument supplied assuming latest log file in temp directory")
@@ -176,8 +177,9 @@ if __name__ == "__main__":
         print("we have file {0}".format(inFileName))
 
     else:
+        print("To many arguments, I don't know what to do")
         print(args)
-        inFileName = r"C:\Users\oneillda\AppData\Local\Temp\Soft_start_testbench.log"
+
 
     outFileType = options.outFileType
     outFileName = "{0}_{1}.{2}".format(inFileName.split('\\')[-1].split('.')[0], time.strftime('%Y-%m-%d_%H-%M-%S'),

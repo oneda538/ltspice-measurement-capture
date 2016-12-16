@@ -1,6 +1,6 @@
 Written by Daniel O'Neill in 2015
 
-This application is designed to analyse LTspice IV log files and extract all 
+This application is designed to analyse LTspice XVII log files and extract all
 measurements over every step. It is intended to help analyse data after 
 multiple runs (i.e. Monte Carlo analysis).
 
@@ -10,12 +10,14 @@ the latest log file in that folder.
 
 The output can either be in a csv format (You can chose a different extension) 
 or in a xlsx format (default). The xlsx option has a freeze panes and auto 
-filter applied. This is decided via a command line parameter.
+filter applied. This can be overridden via a command line parameter.
 
-The default run time option (for me in Win 7) is below:
+The default run time option (for me in Win 10) is below:
 LT_meas_to_csv.exe -t xlsx C:\Users\{username}\AppData\Local\Temp
 
-
+This has been updated to work with LTspiceXVII. Specifically it now works with
+the Unicode files that it generates. To make this easy it now also Python3 as
+Unicode is supported natively.
 
 How to use:
 
